@@ -4,9 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// if these imports aren't working, right click 'build.gradle',
+// 'Manage Vendor Libraries' > 'Install new libraries (online)'
+// then copy paste the following link:
+// https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +30,15 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  // XboxController xbox = new XboxController(0);
+  Joystick logitech = new Joystick(4);
+  
+  VictorSPX leftForward = new VictorSPX(3);
+  VictorSPX leftBackward = new VictorSPX(2);
+  VictorSPX rightBackward = new VictorSPX(1);
+  VictorSPX rightForward = new VictorSPX(0);
+  
+  final double speedMultiplier = 0.5; // speed multiplier for the motors
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -78,7 +97,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    double yAxis = -logitech.getRawAxis(1); // + FORWARDS, - BACKWARDS
+    double xAxis = logitech.getRawAxis(0); // + RIGHT, - LEFT
+
+    leftBackward.set(VictorSPXControlMode.PercentOutput, yAxis * speedMultiplier);
+    leftForward.set(VictorSPXControlMode.PercentOutput, yAxis * speedMultiplier);
+    rightBackward.set(VictorSPXControlMode.PercentOutput, xAxis * speedMultiplier);
+    rightForward.set(VictorSPXControlMode.PercentOutput, xAxis * speedMultiplier);
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override

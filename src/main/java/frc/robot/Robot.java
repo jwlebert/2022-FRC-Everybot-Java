@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
 	VictorSPX m_intake = new VictorSPX(4);
 
 	final double motorSpeedMultiplier = 0.5;
-	final double intakeSpeedMultiplier = 0.75;
+	final double intakeSpeedMultiplier = 0.5;
 	
 	/**
 	* This function is run when the robot is first started up and should be used for any
@@ -128,7 +128,9 @@ public class Robot extends TimedRobot {
 			m_intake.set(VictorSPXControlMode.PercentOutput, intakeSpeedMultiplier);
 		} else if (logitech.getRawButton(2)) {
 			m_intake.set(VictorSPXControlMode.PercentOutput, -intakeSpeedMultiplier);
-		};
+		} else {
+			m_intake.set(VictorSPXControlMode.PercentOutput, 0);
+		}
 	}
 	
 	/** This function is called once when the robot is disabled. */

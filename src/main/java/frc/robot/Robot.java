@@ -4,20 +4,13 @@
 
 package frc.robot;
 
+import frc.robot.components.Drivetrain;
+import frc.robot.components.Intake;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-// if these imports aren't working, right click 'build.gradle',
-// 'Manage Vendor Libraries' > 'Install new libraries (online)'
-// then copy paste the following link:
-// https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
-import frc.robot.components.Drivetrain;
 
 /**
 * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,10 +28,7 @@ public class Robot extends TimedRobot {
 	Joystick logitech = new Joystick(0);
 
 	Drivetrain drivetrain = new Drivetrain(logitech, 0.5);
-	
-	VictorSPX m_intake = new VictorSPX(4);
-
-	final double intakeSpeedMultiplier = 0.5;
+	Intake intake = new Intake(logitech, 0.5);
 	
 	/**
 	* This function is run when the robot is first started up and should be used for any
@@ -99,16 +89,8 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-
 		drivetrain.drive();
-
-		if (logitech.getRawButton(1)) {
-			m_intake.set(VictorSPXControlMode.PercentOutput, intakeSpeedMultiplier);
-		} else if (logitech.getRawButton(2)) {
-			m_intake.set(VictorSPXControlMode.PercentOutput, -intakeSpeedMultiplier);
-		} else {
-			m_intake.set(VictorSPXControlMode.PercentOutput, 0);
-		}
+		intake.run();
 	}
 	
 	/** This function is called once when the robot is disabled. */

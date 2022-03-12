@@ -2,11 +2,11 @@ package frc.robot.components;
 
 import frc.robot.adapters.VictorMotorAdapter;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 /**
  * A class that represents the drivetrain of the robot.
@@ -36,11 +36,7 @@ public class Drivetrain {
      * @param {Joystick} driverInput - Device recieving driver input.
      * @param {double} speedMultiplier - Used to set max output.
      */
-    public Drivetrain(
-        Joystick driverInput, 
-        double speedMultiplier
-        ) {
-            
+    public Drivetrain(Joystick driverInput, double speedMultiplier) {
         this.driverInput = driverInput;
 
         m_left.setInverted(true);
@@ -52,5 +48,5 @@ public class Drivetrain {
 		double xAxis = driverInput.getRawAxis(0); // + RIGHT, - LEFT
 		
 		m_drive.arcadeDrive(yAxis, -xAxis);
-    };
+    }
 }

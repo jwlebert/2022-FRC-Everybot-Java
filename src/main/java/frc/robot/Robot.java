@@ -52,7 +52,10 @@ public class Robot extends TimedRobot {
 
 	DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 	
-	final double speedMultiplier = 0.5; // speed multiplier for the motors
+	VictorSPX m_intake = new VictorSPX(4);
+
+	final double motorSpeedMultiplier = 0.5;
+	final double intakeSpeedMultiplier = 0.75;
 	
 	/**
 	* This function is run when the robot is first started up and should be used for any
@@ -65,7 +68,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto choices", m_chooser);
 
 		m_left.setInverted(true); // inverts left motors
-		m_drive.setMaxOutput(speedMultiplier);
+		m_drive.setMaxOutput(motorSpeedMultiplier);
 	}
 	
 	/**
@@ -120,6 +123,12 @@ public class Robot extends TimedRobot {
 		double xAxis = logitech.getRawAxis(0); // + RIGHT, - LEFT
 		
 		m_drive.arcadeDrive(yAxis, -xAxis);
+
+		if (logitech.getRawButton(1)) {
+			m_intake.set(VictorSPXControlMode.PercentOutput, intakeSpeedMultiplier);
+		} else if (logitech.getRawButton(2)) {
+			m_intake.set(VictorSPXControlMode.PercentOutput, -intakeSpeedMultiplier);
+		};
 	}
 	
 	/** This function is called once when the robot is disabled. */

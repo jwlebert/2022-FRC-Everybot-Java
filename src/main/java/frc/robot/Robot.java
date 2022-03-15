@@ -4,22 +4,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.components.Drivetrain;
+import frc.robot.components.Intake;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-// if these imports aren't working, right click 'build.gradle',
-// 'Manage Vendor Libraries' > 'Install new libraries (online)'
-// then copy paste the following link:
-// https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 /**
 * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -34,28 +25,10 @@ public class Robot extends TimedRobot {
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	// XboxController xbox = new XboxController(0);
-	Joystick logitech = new Joystick(0);
-	
-	VictorSPX m_frontLeft = new VictorSPX(3); // leftForward
-	VictorSPX m_rearLeft = new VictorSPX(2); // leftBackward
-	MotorControllerGroup m_left = 	new MotorControllerGroup(
-										new VictorMotorAdapter(m_frontLeft),
-										new VictorMotorAdapter(m_rearLeft)
-										);
-	
-	VictorSPX m_frontRight = new VictorSPX(0); // rightForward
-	VictorSPX m_rearRight = new VictorSPX(1); // rightBackward
-	MotorControllerGroup m_right = 	new MotorControllerGroup(
-										new VictorMotorAdapter(m_frontRight),
-										new VictorMotorAdapter(m_rearRight)
-										);
+	Joystick input = new Joystick(0);
 
-	DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
-	
-	VictorSPX m_intake = new VictorSPX(4);
-
-	final double motorSpeedMultiplier = 0.5;
-	final double intakeSpeedMultiplier = 0.5;
+	Drivetrain drivetrain = new Drivetrain(0.5);
+	Intake intake = new Intake(0.5);
 	
 	/**
 	* This function is run when the robot is first started up and should be used for any
@@ -66,9 +39,6 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
-
-		m_left.setInverted(true); // inverts left motors
-		m_drive.setMaxOutput(motorSpeedMultiplier);
 	}
 	
 	/**
@@ -119,18 +89,8 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		double yAxis = logitech.getRawAxis(1); // + FORWARDS, - BACKWARDS
-		double xAxis = logitech.getRawAxis(0); // + RIGHT, - LEFT
-		
-		m_drive.arcadeDrive(yAxis, -xAxis);
-
-		if (logitech.getRawButton(1)) {
-			m_intake.set(VictorSPXControlMode.PercentOutput, intakeSpeedMultiplier);
-		} else if (logitech.getRawButton(2)) {
-			m_intake.set(VictorSPXControlMode.PercentOutput, -intakeSpeedMultiplier);
-		} else {
-			m_intake.set(VictorSPXControlMode.PercentOutput, 0);
-		}
+		drivetrain.drive(input.getRawAxis(1), input.getRawAxis(0));
+		intake.run(input.getRawButton(1), input.getRawButton(2));
 	}
 	
 	/** This function is called once when the robot is disabled. */

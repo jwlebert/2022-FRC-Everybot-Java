@@ -1,4 +1,5 @@
-package frc.robot;
+package frc.robot.adapters;
+
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;

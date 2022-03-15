@@ -1,7 +1,5 @@
 package frc.robot.components;
 
-import edu.wpi.first.wpilibj.Joystick;
-
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 

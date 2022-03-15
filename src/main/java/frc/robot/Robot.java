@@ -25,10 +25,10 @@ public class Robot extends TimedRobot {
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	// XboxController xbox = new XboxController(0);
-	Joystick logitech = new Joystick(0);
+	Joystick input = new Joystick(0);
 
-	Drivetrain drivetrain = new Drivetrain(logitech, 0.5);
-	Intake intake = new Intake(logitech, 0.5);
+	Drivetrain drivetrain = new Drivetrain(0.5);
+	Intake intake = new Intake(0.5);
 	
 	/**
 	* This function is run when the robot is first started up and should be used for any
@@ -89,8 +89,8 @@ public class Robot extends TimedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		drivetrain.drive();
-		intake.run();
+		drivetrain.drive(input.getRawAxis(1), input.getRawAxis(0));
+		intake.run(input.getRawButton(1), input.getRawButton(2));
 	}
 	
 	/** This function is called once when the robot is disabled. */

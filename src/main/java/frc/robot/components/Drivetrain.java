@@ -13,9 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
  * <p> Responsible for driving the robot.
  */
 public class Drivetrain {
-
-    Joystick driverInput;
-
     VictorSPX m_frontLeft = new VictorSPX(3);
 	VictorSPX m_rearLeft = new VictorSPX(2);
 	MotorControllerGroup m_left = 	new MotorControllerGroup(
@@ -33,20 +30,14 @@ public class Drivetrain {
 	DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 
     /**
-     * @param {Joystick} driverInput - Device recieving driver input.
      * @param {double} speedMultiplier - Used to set max output.
      */
-    public Drivetrain(Joystick driverInput, double speedMultiplier) {
-        this.driverInput = driverInput;
-
+    public Drivetrain(double speedMultiplier) {
         m_left.setInverted(true);
 		m_drive.setMaxOutput(speedMultiplier);
     }
 
-    public void drive() {
-        double yAxis = driverInput.getRawAxis(1); // + FORWARDS, - BACKWARDS
-		double xAxis = driverInput.getRawAxis(0); // + RIGHT, - LEFT
-		
+    public void drive(double yAxis, double xAxis) {		
 		m_drive.arcadeDrive(yAxis, -xAxis);
     }
 }
